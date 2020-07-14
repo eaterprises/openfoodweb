@@ -9,7 +9,6 @@ require 'open_food_network/order_grouper'
 require 'open_food_network/customers_report'
 require 'open_food_network/users_and_enterprises_report'
 require 'open_food_network/order_cycle_management_report'
-require 'open_food_network/packing_report'
 require 'open_food_network/sales_tax_report'
 require 'open_food_network/xero_invoices_report'
 require 'open_food_network/payments_report'
@@ -19,6 +18,7 @@ module Spree
   module Admin
     class ReportsController < Spree::Admin::BaseController
       include Spree::ReportsHelper
+      helper OrderManagement::ReportsHelper
 
       ORDER_MANAGEMENT_ENGINE_REPORTS = [
         :bulk_coop,
@@ -30,7 +30,7 @@ module Spree
       before_action :cache_search_state
       # Fetches user's distributors, suppliers and order_cycles
       before_action :load_data,
-                    only: [:customers, :products_and_inventory, :order_cycle_management, :packing]
+                    only: [:customers, :products_and_inventory, :order_cycle_management]
 
       respond_to :html
 
@@ -64,19 +64,6 @@ module Spree
 
         render_report(@report.header, @table, params[:csv],
                       "order_cycle_management_#{timestamp}.csv")
-      end
-
-      def packing
-        params[:q] ||= {}
-
-        @report_types = report_types[:packing]
-        @report_type = params[:report_type]
-
-        # -- Build Report with Order Grouper
-        @report = OpenFoodNetwork::PackingReport.new spree_current_user, params, render_content?
-        @table = order_grouper_table
-
-        render_report(@report.header, @table, params[:csv], "packing_#{timestamp}.csv")
       end
 
       def orders_and_distributors
@@ -297,7 +284,7 @@ module Spree
           public_send("#{report}_admin_reports_url".to_sym)
         end
       rescue NoMethodError
-        url_for([:new, :admin, :reports, report.to_s.singularize])
+        main_app.order_management_reports_url(report_type: report)
       end
 
       # List of reports that have been moved to the Order Management engine
