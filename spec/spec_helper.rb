@@ -150,6 +150,19 @@ RSpec.configure do |config|
     end
   end
 
+  config.after(:each, type: :feature, js: true) do
+    errors = page.driver.browser.manage.logs.get(:browser)
+
+    aggregate_failures "javascript errors" do
+      errors.each do |error|
+        error_message = error.message.gsub("\\n", "\n")
+        expect(error.level).to_not eq("SEVERE"), error_message
+        next unless error.level == "WARNING"
+        STDERR.puts "JS: WARN: #{error_message}"
+      end
+    end
+  end
+
   # Webmock raises errors that inherit directly from Exception (not StandardError).
   # The messages contain useful information for debugging stubbed requests to external
   # services (in tests), but they normally don't appear in the test output.
