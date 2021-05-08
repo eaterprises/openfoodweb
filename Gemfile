@@ -13,6 +13,7 @@ gem 'ransack', '2.4.1'
 gem 'responders'
 gem 'sass', '~> 3.4.0' # this restriction originates from foundation-rails's version
 gem 'sass-rails', '< 5.1.0' # this restriction originates from the compass-rails's version
+gem 'webpacker', '~> 5'
 
 gem 'i18n'
 gem 'i18n-js', '~> 3.8.3'
