@@ -4,6 +4,8 @@ source 'https://rubygems.org'
 ruby "2.5.9"
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}.git" }
 
+gem 'dotenv-rails', require: 'dotenv/rails-now' # Load ENV vars before other gems
+
 gem 'rails', '~> 6.0.3.7'
 
 gem 'activemerchant', '>= 1.78.0'
@@ -72,7 +74,6 @@ gem 'angularjs-file-upload-rails', '~> 2.4.1'
 gem 'bootsnap', require: false
 gem 'custom_error_message', github: 'jeremydurham/custom-err-msg'
 gem 'dalli'
-gem 'figaro'
 gem 'geocoder'
 gem 'gmaps4rails'
 gem 'mimemagic', '> 0.3.5'
@@ -82,6 +83,7 @@ gem 'rack-rewrite'
 gem 'rack-ssl', require: 'rack/ssl'
 gem 'roadie-rails'
 
+gem 'puma'
 gem 'redis', '>= 4.0', require: ['redis', 'redis/connection/hiredis']
 gem 'hiredis'
 gem 'sidekiq'
@@ -127,7 +129,7 @@ gem "view_component", require: "view_component/engine"
 
 group :production, :staging do
   gem 'ddtrace'
-  gem 'unicorn-worker-killer'
+  gem 'sd_notify' # For better Systemd process management. Used by Puma.
 end
 
 group :test, :development do
@@ -147,7 +149,6 @@ group :test, :development do
   gem 'selenium-webdriver'
   gem 'shoulda-matchers'
   gem 'timecop'
-  gem 'unicorn-rails'
   gem 'webdrivers'
 end
 
