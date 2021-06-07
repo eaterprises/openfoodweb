@@ -460,7 +460,6 @@ Metrics/AbcSize:
   - engines/order_management/app/services/order_management/stock/package.rb
   - engines/order_management/app/services/order_management/stock/packer.rb
   - engines/order_management/app/services/order_management/subscriptions/validator.rb
-  - lib/active_merchant/billing/gateways/stripe_decorator.rb
   - lib/active_merchant/billing/gateways/stripe_payment_intents.rb
   - lib/discourse/single_sign_on.rb
   - lib/open_food_network/customers_report.rb
