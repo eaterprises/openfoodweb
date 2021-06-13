@@ -102,8 +102,6 @@ gem 'uglifier', '>= 1.0.3'
 
 gem 'angular_rails_csrf'
 
-gem 'foundation-rails', '= 5.5.2.1'
-
 gem 'jquery-migrate-rails'
 gem 'jquery-rails', '4.4.0'
 gem 'jquery-ui-rails', '~> 4.2'
