@@ -11,8 +11,6 @@ gem 'angular-rails-templates', '>= 0.3.0'
 gem 'awesome_nested_set'
 gem 'ransack', '2.4.1'
 gem 'responders'
-gem 'sass', '~> 3.4.0' # this restriction originates from foundation-rails's version
-gem 'sass-rails', '< 5.1.0' # this restriction originates from the compass-rails's version
 gem 'webpacker', '~> 5'
 
 gem 'i18n'
@@ -97,7 +95,6 @@ gem 'whenever', require: false
 gem 'test-unit', '~> 3.4'
 
 gem 'coffee-rails', '~> 5.0.0'
-gem 'compass-rails'
 
 gem 'mini_racer', '0.4.0'
 
