@@ -51,7 +51,7 @@
 #
 #= require modernizr
 #
-#= require foundation
+#= require foundation-sites/js/foundation.js
 #= require ./darkswarm
 #= require ./overrides
 #= require_tree ./mixins
