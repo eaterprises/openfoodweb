@@ -469,7 +469,7 @@ feature '
 
     scenario "loading edit product image page including url filter", js: true do
       product = create(:simple_product, supplier: @supplier2)
-      image = File.open(File.expand_path('../../../app/assets/images/logo-white.png', __dir__))
+      image = File.open(File.expand_path('../../../app/webpacker/images/logo-white.png', __dir__))
       image_object = Spree::Image.create(viewable_id: product.master.id, viewable_type: 'Spree::Variant', alt: "position 1", attachment: image, position: 1)
 
       visit spree.admin_product_images_path(product, filter)
@@ -486,7 +486,7 @@ feature '
 
     scenario "updating a product image including url filter", js: true do
       product = create(:simple_product, supplier: @supplier2)
-      image = File.open(File.expand_path('../../../app/assets/images/logo-white.png', __dir__))
+      image = File.open(File.expand_path('../../../app/webpacker/images/logo-white.png', __dir__))
       image_object = Spree::Image.create(viewable_id: product.master.id, viewable_type: 'Spree::Variant', alt: "position 1", attachment: image, position: 1)
 
       file_path = Rails.root + "spec/support/fixtures/thinking-cat.jpg"
@@ -504,7 +504,7 @@ feature '
 
     scenario "deleting product images", js: true do
       product = create(:simple_product, supplier: @supplier2)
-      image = File.open(File.expand_path('../../../app/assets/images/logo-white.png', __dir__))
+      image = File.open(File.expand_path('../../../app/webpacker/images/logo-white.png', __dir__))
       Spree::Image.create(viewable_id: product.master.id, viewable_type: 'Spree::Variant', alt: "position 1", attachment: image, position: 1)
 
       visit spree.admin_product_images_path(product)
@@ -521,7 +521,7 @@ feature '
 
     scenario "deleting product image including url filter", js: true do
       product = create(:simple_product, supplier: @supplier2)
-      image = File.open(File.expand_path('../../../app/assets/images/logo-white.png', __dir__))
+      image = File.open(File.expand_path('../../../app/webpacker/images/logo-white.png', __dir__))
       Spree::Image.create(viewable_id: product.master.id, viewable_type: 'Spree::Variant', alt: "position 1", attachment: image, position: 1)
 
       visit spree.admin_product_images_path(product, filter)

@@ -30,7 +30,7 @@ feature "Managing enterprise images" do
 
       scenario "editing logo" do
         # Adding image
-        attach_file "enterprise[logo]", Rails.root.join("app", "assets", "images", "logo-white.png")
+        attach_file "enterprise[logo]", Rails.root.join("app", "webpacker", "images", "logo-white.png")
         click_button "Update"
 
         expect(page).to have_content("Enterprise \"#{distributor.name}\" has been successfully updated!")
@@ -41,7 +41,7 @@ feature "Managing enterprise images" do
         end
 
         # Replacing image
-        attach_file "enterprise[logo]", Rails.root.join("app", "assets", "images", "logo-black.png")
+        attach_file "enterprise[logo]", Rails.root.join("app", "webpacker", "images", "logo-black.png")
         click_button "Update"
 
         expect(page).to have_content("Enterprise \"#{distributor.name}\" has been successfully updated!")
@@ -66,7 +66,7 @@ feature "Managing enterprise images" do
 
       scenario "editing promo image" do
         # Adding image
-        attach_file "enterprise[promo_image]", Rails.root.join("app", "assets", "images", "logo-white.png")
+        attach_file "enterprise[promo_image]", Rails.root.join("app", "webpacker", "images", "logo-white.png")
         click_button "Update"
 
         expect(page).to have_content("Enterprise \"#{distributor.name}\" has been successfully updated!")
@@ -77,7 +77,7 @@ feature "Managing enterprise images" do
         end
 
         # Replacing image
-        attach_file "enterprise[promo_image]", Rails.root.join("app", "assets", "images", "logo-black.png")
+        attach_file "enterprise[promo_image]", Rails.root.join("app", "webpacker", "images", "logo-black.png")
         click_button "Update"
 
         expect(page).to have_content("Enterprise \"#{distributor.name}\" has been successfully updated!")
