@@ -6,6 +6,7 @@ feature "As a consumer I want to check out my cart", js: true do
   include AuthenticationHelper
   include ShopWorkflow
   include CheckoutRequestsHelper
+  include FileHelper
   include WebHelper
   include UIComponentHelper
 
@@ -135,7 +136,7 @@ feature "As a consumer I want to check out my cart", js: true do
     end
 
     context "when distributor has T&Cs" do
-      let(:fake_terms_and_conditions_path) { Rails.root.join("app/assets/images/logo-white.png") }
+      let(:fake_terms_and_conditions_path) { white_logo_path }
       let(:terms_and_conditions_file) { Rack::Test::UploadedFile.new(fake_terms_and_conditions_path, "application/pdf") }
 
       before do
@@ -229,7 +230,7 @@ feature "As a consumer I want to check out my cart", js: true do
     end
 
     context "when the seller's terms and the platform's terms have to be accepted" do
-      let(:fake_terms_and_conditions_path) { Rails.root.join("app/assets/images/logo-white.png") }
+      let(:fake_terms_and_conditions_path) { white_logo_path }
       let(:terms_and_conditions_file) { Rack::Test::UploadedFile.new(fake_terms_and_conditions_path, "application/pdf") }
       let(:tos_url) { "https://example.org/tos" }
 

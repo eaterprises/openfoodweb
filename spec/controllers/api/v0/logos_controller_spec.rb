@@ -5,6 +5,7 @@ require "spec_helper"
 module Api
   describe V0::LogosController, type: :controller do
     include AuthenticationHelper
+    include FileHelper
 
     let(:admin_user) { create(:admin_user) }
     let(:enterprise_owner) { create(:user) }
@@ -15,8 +16,7 @@ module Api
     let(:other_enterprise_manager) { create(:user, enterprise_limit: 10, enterprises: [other_enterprise]) }
 
     describe "removing logo" do
-      image_path = File.open(Rails.root.join("app", "assets", "images", "logo-black.png"))
-      let(:image) { Rack::Test::UploadedFile.new(image_path, "image/png") }
+      let(:image) { Rack::Test::UploadedFile.new(black_logo_file, "image/png") }
 
       let(:enterprise) { create(:enterprise, owner: enterprise_owner, logo: image) }
 
