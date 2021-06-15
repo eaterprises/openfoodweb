@@ -4,6 +4,7 @@ require "spec_helper"
 
 feature "Managing enterprise images" do
   include WebHelper
+  include FileHelper
   include AuthenticationHelper
 
   context "as an Enterprise user", js: true do
@@ -30,7 +31,7 @@ feature "Managing enterprise images" do
 
       scenario "editing logo" do
         # Adding image
-        attach_file "enterprise[logo]", Rails.root.join("app", "webpacker", "images", "logo-white.png")
+        attach_file "enterprise[logo]", white_logo_path
         click_button "Update"
 
         expect(page).to have_content("Enterprise \"#{distributor.name}\" has been successfully updated!")
@@ -41,7 +42,7 @@ feature "Managing enterprise images" do
         end
 
         # Replacing image
-        attach_file "enterprise[logo]", Rails.root.join("app", "webpacker", "images", "logo-black.png")
+        attach_file "enterprise[logo]", black_logo_path
         click_button "Update"
 
         expect(page).to have_content("Enterprise \"#{distributor.name}\" has been successfully updated!")
@@ -66,7 +67,7 @@ feature "Managing enterprise images" do
 
       scenario "editing promo image" do
         # Adding image
-        attach_file "enterprise[promo_image]", Rails.root.join("app", "webpacker", "images", "logo-white.png")
+        attach_file "enterprise[promo_image]", white_logo_path
         click_button "Update"
 
         expect(page).to have_content("Enterprise \"#{distributor.name}\" has been successfully updated!")
@@ -77,7 +78,7 @@ feature "Managing enterprise images" do
         end
 
         # Replacing image
-        attach_file "enterprise[promo_image]", Rails.root.join("app", "webpacker", "images", "logo-black.png")
+        attach_file "enterprise[promo_image]", black_logo_path
         click_button "Update"
 
         expect(page).to have_content("Enterprise \"#{distributor.name}\" has been successfully updated!")

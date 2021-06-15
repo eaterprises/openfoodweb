@@ -4,6 +4,7 @@ require 'spec_helper'
 
 feature "As a consumer I want to shop with a distributor", js: true do
   include AuthenticationHelper
+  include FileHelper
   include WebHelper
   include ShopWorkflow
   include UIComponentHelper
@@ -23,7 +24,7 @@ feature "As a consumer I want to shop with a distributor", js: true do
 
     it "shows a distributor with images" do
       # Given the distributor has a logo
-      distributor.logo = File.new(Rails.root + 'app/webpacker/images/logo-white.png')
+      distributor.logo = File.new(white_logo_path)
       distributor.save!
 
       # Then we should see the distributor and its logo
