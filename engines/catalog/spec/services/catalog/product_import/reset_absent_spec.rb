@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-module ProductImport
+module Catalog::ProductImport
   describe ResetAbsent do
     let(:entry_processor) { instance_double(EntryProcessor) }
 
