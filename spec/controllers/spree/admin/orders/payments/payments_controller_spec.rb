@@ -35,12 +35,24 @@ describe Spree::Admin::PaymentsController, type: :controller do
                                                     completed_at: Time.zone.now)
       end
 
+      context "when the payment cannot be saved" do
+        before do
+          allow_any_instance_of(Spree::Payment).to receive(:save).and_return(false)
+        end
+
+        it "redirects to the list of payments" do
+          spree_post :create, payment: params, order_id: order.number
+
+          expect(response).to redirect_to(spree.admin_order_payments_url(order))
+        end
+      end
+
       context "with Check payment (payment.process! does nothing)" do
         it "redirects to list of payments with success flash" do
           spree_post :create, payment: params, order_id: order.number
 
           redirects_to_list_of_payments_with_success_flash
-          expect(order.reload.payments.last.state).to eq "checkout"
+          expect(order.reload.payments.last.state).to eq "pending"
         end
       end
 
@@ -56,7 +68,7 @@ describe Spree::Admin::PaymentsController, type: :controller do
           spree_post :create, payment: params, order_id: order.number
 
           redirects_to_new_payment_page_with_flash_error("Payment Gateway Error")
-          expect(order.reload.payments.last.state).to eq "checkout"
+          expect(order.reload.payments.last.state).to eq "pending"
         end
       end
 
@@ -78,30 +90,49 @@ describe Spree::Admin::PaymentsController, type: :controller do
           end
         end
 
-        context "where payment.authorize! does not move payment to pending state" do
+        context "when payment.authorize! raises StateMachines::InvalidTransition" do
           before do
-            allow_any_instance_of(Spree::Payment).to receive(:authorize!).and_return(true)
+            allow_any_instance_of(Spree::Payment).to receive(:pend).and_return(false)
+            allow_any_instance_of(Spree::Gateway::StripeSCA)
+              .to receive(:authorize).and_return(Spree::Gateway::SuccessfulResponse.new)
           end
 
           it "redirects to new payment page with flash error" do
             spree_post :create, payment: params, order_id: order.number
 
             redirects_to_new_payment_page_with_flash_error("Authorization Failure")
-            expect(order.reload.payments.last.state).to eq "checkout"
+            expect(order.reload.payments.last.state).to eq "processing"
           end
         end
 
         context "where further action is required" do
-          before do
-            allow_any_instance_of(Spree::Payment).to receive(:authorize!) do |payment|
-              payment.update cvv_response_message: "https://www.stripe.com/authorize"
-              payment.update state: "requires_authorization"
-            end
+          let(:stripe_response) do
+            instance_double(
+              ActiveMerchant::Billing::Response,
+              success?: true,
+              authorization: true,
+              avs_result: { "code" => "xxx" },
+              cvv_result: { "message" => "https://www.stripe.com/authorize" }
+            )
           end
+
+          before do
+            allow_any_instance_of(Spree::Gateway::StripeSCA)
+              .to receive(:authorize).and_return(stripe_response)
+          end
+
           it "redirects to new payment page with flash error" do
             spree_post :create, payment: params, order_id: order.number
 
             redirects_to_new_payment_page_with_flash_error(I18n.t('action_required'))
+          end
+
+          it "sends an authorize_payment email" do
+            mail = double(:authorize_payment, deliver_later: true)
+            expect(PaymentMailer).to receive(:authorize_payment)
+              .with(kind_of(Spree::Payment)).and_return(mail)
+
+            spree_post :create, payment: params, order_id: order.number
           end
         end
 
@@ -139,18 +170,13 @@ describe Spree::Admin::PaymentsController, type: :controller do
       end
 
       def redirects_to_list_of_payments_with_success_flash
-        expect_redirect_to spree.admin_order_payments_url(order)
+        expect(response).to redirect_to spree.admin_order_payments_url(order)
         expect(flash[:success]).to eq "Payment has been successfully created!"
       end
 
       def redirects_to_new_payment_page_with_flash_error(flash_error)
-        expect_redirect_to spree.new_admin_order_payment_url(order)
+        expect(response).to redirect_to spree.new_admin_order_payment_url(order)
         expect(flash[:error]).to eq flash_error
-      end
-
-      def expect_redirect_to(path)
-        expect(response.status).to eq 302
-        expect(response.location).to eq path
       end
     end
   end
@@ -168,7 +194,7 @@ describe Spree::Admin::PaymentsController, type: :controller do
       create(:payment, order: order, payment_method: payment_method, amount: order.total)
     end
 
-    let(:successful_response) { ActiveMerchant::Billing::Response.new(true, "Yay!") }
+    let(:successful_response) { Spree::Gateway::SuccessfulResponse.new("Yay!") }
 
     context 'on credit event' do
       let(:params) { { e: 'credit', order_id: order.number, id: payment.id } }

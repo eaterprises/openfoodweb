@@ -25,6 +25,13 @@ module Spree
         gateway_action(source, :authorize, :pend, return_url: return_url)
       end
 
+      def request_user_authorization
+        return unless requires_authorization?
+
+        yield if block_given?
+        true
+      end
+
       def purchase!
         started_processing!
         gateway_action(source, :purchase, :complete)

@@ -105,6 +105,10 @@ module Spree
         end
         refund_transaction_response
       end
+
+      def authorize(_money, _creditcard, _gateway_options)
+        Gateway::SuccessfulResponse.new
+      end
     end
   end
 end
