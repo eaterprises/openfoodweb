@@ -1,4 +1,4 @@
-%label{for: path}= name
+%label{for: path, "ng-class": "{error: !fieldValid('#{path}')}" }= name
 
 = select_tag path, options_for_select(options), attributes
 

@@ -1,0 +1,17 @@
+- content_for :injection_data do
+  = inject_available_shipping_methods
+  = inject_available_payment_methods
+  = inject_saved_credit_cards
+
+= form_for current_order,
+  url: update_checkout_path,
+  html: {name: "split_checkout",
+    id: "checkout_form",
+    novalidate: true,
+    method: "PUT",
+    "ng-submit" => "purchase($event, split_checkout)"} do |f|
+
+  %div.checkout-step.medium-6
+    - if true ## test step
+      = hidden_field_tag "advance_to_state", "delivery"
+      = render "split_checkout/your_details", f: f
