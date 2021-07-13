@@ -56,6 +56,17 @@ module Spree
       end
     end
 
+    def self.new_with_session(params, session)
+      if session["devise.user_attributes"]
+        new(session["devise.user_attributes"], without_protection: true) do |user|
+          user.attributes = params
+          user.valid?
+        end
+      else
+        super
+      end
+    end
+
     # Whether a user has a role or not.
     def has_spree_role?(role_in_question)
       spree_roles.where(name: role_in_question.to_s).any?
