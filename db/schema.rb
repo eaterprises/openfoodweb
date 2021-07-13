@@ -2,15 +2,15 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# This file is the source Rails uses to define your schema when running `rails
-# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
 # be faster and is potentially less error prone than running all of your
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_27_201938) do
+ActiveRecord::Schema.define(version: 2021_07_13_165335) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -388,7 +388,7 @@ ActiveRecord::Schema.define(version: 2021_05_27_201938) do
     t.string "state", limit: 255
     t.integer "order_id"
     t.boolean "included", default: false
-    t.integer  "tax_category_id"
+    t.integer "tax_category_id"
     t.index ["adjustable_type", "adjustable_id"], name: "index_spree_adjustments_on_adjustable_type_and_adjustable_id"
     t.index ["order_id"], name: "index_spree_adjustments_on_order_id"
     t.index ["originator_type", "originator_id"], name: "index_spree_adjustments_on_originator_type_and_originator_id"
@@ -1025,6 +1025,8 @@ ActiveRecord::Schema.define(version: 2021_05_27_201938) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email", limit: 255
+    t.string "provider"
+    t.string "uid"
     t.index ["confirmation_token"], name: "index_spree_users_on_confirmation_token", unique: true
     t.index ["email"], name: "email_idx_unique", unique: true
     t.index ["persistence_token"], name: "index_users_on_persistence_token"
@@ -1148,11 +1150,11 @@ ActiveRecord::Schema.define(version: 2021_05_27_201938) do
   end
 
   create_table "terms_of_service_files", force: :cascade do |t|
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-    t.string   "attachment_file_name"
-    t.string   "attachment_content_type"
-    t.integer  "attachment_file_size"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "attachment_file_name"
+    t.string "attachment_content_type"
+    t.integer "attachment_file_size"
     t.datetime "attachment_updated_at"
   end
 
